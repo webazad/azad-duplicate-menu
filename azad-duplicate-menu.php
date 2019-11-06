@@ -1,7 +1,7 @@
 <?php
 /* 
 Plugin Name: Azad Duplicate Menu
-Description: The easiest way to duplicate menu.
+Description: The easiest way to duplicate menuyour wordpress menu.
 Plugin URI: gittechs.com/plugin/azad-duplicate-menu
 Author: Md. Abul Kalam Azad
 Author URI: gittechs.com/author
@@ -15,9 +15,6 @@ Domain Path: /languages
 
 defined( 'ABSPATH' ) || exit;
 
-use Inc\Activate;
-use Inc\Deactivate;
-
 require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 $plugin_data = get_plugin_data( __FILE__ );
 
@@ -26,23 +23,6 @@ define( 'adm_path', plugin_dir_path( __FILE__ ) );
 define( 'adm_plugin', plugin_basename( __FILE__ ) );
 define( 'adm_version', $plugin_data['Version'] );
 define( 'adm_name', $plugin_data['Name'] );
-
-function activate_adm(){
-    Activate::activate();	
-}
-//register_activation_hook(__FILE__,'activate_adm');
-
-function deactivate_adm(){
-    Deactivate::deactivate();
-}
-//register_deactivation_hook(__FILE__,'deactivate_adm');
-
-if(file_exists(dirname(__FILE__) . '/vendor/autoload.php')){
-    require_once dirname(__FILE__) . '/vendor/autoload.php';
-}
-if ( class_exists( 'Inc\\Init' ) ) :    
-    Inc\Init::register_services();
-endif;
 
 $azad_duplicate_menu = new Azad_Duplicate_Menu();
 class Azad_Duplicate_Menu{
