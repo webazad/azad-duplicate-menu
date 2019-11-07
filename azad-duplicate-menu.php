@@ -64,6 +64,11 @@ class Azad_Duplicate_Menu{
                 'menu-item-status'      => $menu_item->post_status
             );
             $parent_id = wp_update_nav_menu_item($new_id, 0, $args);
+            $rel[$menu_item->db_id] = $parent_id;
+            if($menu_item->menu_item_parent){
+                $args['menu-item-parent-id'] = $rel[$menu_item->menu_item_paernt];
+                $parent_id = wp_update_nav_menu_item($new_id, $parent_id, $args);
+            }
             // Allow developers to run any custom functionality they'd like.
             do_action('duplicate_menu_item',$menu_item, $args); 
             $i++;
@@ -77,6 +82,7 @@ class Azad_Duplicate_Menu{
             <div id="icon-options-general" class="icon32"><br/></div>
             <h2 class=""><?php _e('Duplicate Menu','azad-duplicate-menu'); ?></h2>
             <?php if(!empty($_POST) && wp_verify_nonce($_POST['duplicate_menu_nonce'],'duplicate_menu')) : 
+            
                 $source = intval($_POST['source']);
                 $destination = sanitize_text_field($_POST['new_menu_name']);
 
@@ -94,13 +100,13 @@ class Azad_Duplicate_Menu{
                 </div>                
             <?php endif; ?>
             <?php if(empty($nav_menus)): ?>
-                <p><?php _e('You have not created any nav menus yet...','azad-duplicate-menu'); ?></p>
+                <p><?php _e('You have not created any nav menu yet...','azad-duplicate-menu'); ?></p>
             <?php else: ?>
                 <form method="post" action="">
                     <?php wp_nonce_field('duplicate_menu','duplicate_menu_nonce'); ?>
                     <table class="form-table">
                         <tr valign="top">
-                            <th scopr="row">
+                            <th scope="row">
                                 <label for="source"><?php _e('Duplicate this menu','azad-duplicate-menu'); ?></label>
                             </th>
                             <td>
