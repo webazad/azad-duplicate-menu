@@ -28,6 +28,14 @@ $azad_duplicate_menu = new Azad_Duplicate_Menu();
 class Azad_Duplicate_Menu{
     public function __construct(){
         add_action('admin_menu',array($this,'admin_menu'));
+        //$menus = wp_get_nav_menu_object(3);
+        //$navs = wp_get_nav_menu_items(2);
+        //var_dump($menus);
+        // $nav_menus = wp_get_nav_menu_items(2);
+        // foreach($nav_menus as $item){
+        //     echo $item->name;
+        // }
+        //var_dump($nav_menus);
     }
     public function admin_menu(){
         add_theme_page(__('Duplicate Menu','azad-duplicate-menu'),__('Duplicate Menu','azad-duplicdate-menu'),'edit_theme_options','duplicate-menu',array($this,'options_screen'));
@@ -38,7 +46,7 @@ class Azad_Duplicate_Menu{
         }
         $id = intval($id);
         $name = sanitize_text_field($name);
-        $source = wp_get_nav_menu_object($id);
+        //$source = wp_get_nav_menu_object($id);
         $source_items = wp_get_nav_menu_items($id);
         $new_id = wp_create_nav_menu($name);
 
@@ -66,7 +74,7 @@ class Azad_Duplicate_Menu{
             $parent_id = wp_update_nav_menu_item($new_id, 0, $args);
             $rel[$menu_item->db_id] = $parent_id;
             if($menu_item->menu_item_parent){
-                $args['menu-item-parent-id'] = $rel[$menu_item->menu_item_paernt];
+                $args['menu-item-parent-id'] = $rel[$menu_item->menu_item_parent];
                 $parent_id = wp_update_nav_menu_item($new_id, $parent_id, $args);
             }
             // Allow developers to run any custom functionality they'd like.
@@ -90,13 +98,12 @@ class Azad_Duplicate_Menu{
             ?>
                 <div id="message" class="updated">
                 <p>
-                <?php
-                    if($new_menu_id){
-                        _e('Menu duplicated.','azad-duplicate-menu');
-                    }else{
-                        _e('There was a problem duplicating your menu. No action was taken...','azad-duplicate-menu');
-                    }
-                ?></p>
+                <?php if($new_menu_id) : ?>
+                    <?php _e('Menu duplicated. ','azad-duplicate-menu'); ?> <a href="nav-menus.php?action=edit&amp;menu=<?php echo absint($new_menu_id); ?>"><?php _e('View','azad-duplicate-menu'); ?></a>
+                <?php else: ?>
+                    <?php _e('There was a problem duplicating your menu. No action was taken...','azad-duplicate-menu'); ?>
+                <?php endif; ?>
+                </p>
                 </div>                
             <?php endif; ?>
             <?php if(empty($nav_menus)): ?>
